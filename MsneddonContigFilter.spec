@@ -13,14 +13,17 @@ module MsneddonContigFilter {
 	A string representing a workspace name.
 	*/
 	typedef string workspace_name;
-	
+
 	typedef structure {
-	    int contig_count;
-	} CountContigsResults;
+		string new_contigset_ref;
+		int n_initial_contigs;
+		int n_contigs_removed;
+		int n_contigs_remaining;
+	} FilterContigsResults;
 	
 	/*
 	Count contigs in a ContigSet
 	contigset_id - the ContigSet to count.
 	*/
-	funcdef count_contigs(workspace_name,contigset_id) returns (CountContigsResults) authentication required;
+	funcdef filter_contigs(workspace_name,contigset_id, int min_length) returns (FilterContigsResults) authentication required;
 };
