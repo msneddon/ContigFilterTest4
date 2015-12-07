@@ -171,10 +171,10 @@ class MsneddonContigFilter(object):
             raise ServerError('Unknown', 0, 'An unknown server error occurred')
         return resp['result']
  
-    def count_contigs(self, workspace_name, contigset_id, json_rpc_context = None):
+    def filter_contigs(self, workspace_name, contigset_id, min_length, json_rpc_context = None):
         if json_rpc_context and type(json_rpc_context) is not dict:
-            raise ValueError('Method count_contigs: argument json_rpc_context is not type dict as required.')
-        resp = self._call('MsneddonContigFilter.count_contigs',
-                          [workspace_name, contigset_id], json_rpc_context)
+            raise ValueError('Method filter_contigs: argument json_rpc_context is not type dict as required.')
+        resp = self._call('MsneddonContigFilter.filter_contigs',
+                          [workspace_name, contigset_id, min_length], json_rpc_context)
         return resp[0]
  

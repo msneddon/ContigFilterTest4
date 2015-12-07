@@ -110,9 +110,9 @@ sub new
 
 
 
-=head2 count_contigs
+=head2 filter_contigs
 
-  $return = $obj->count_contigs($workspace_name, $contigset_id)
+  $return = $obj->filter_contigs($workspace_name, $contigset_id, $min_length)
 
 =over 4
 
@@ -123,11 +123,15 @@ sub new
 <pre>
 $workspace_name is a MsneddonContigFilter.workspace_name
 $contigset_id is a MsneddonContigFilter.contigset_id
-$return is a MsneddonContigFilter.CountContigsResults
+$min_length is an int
+$return is a MsneddonContigFilter.FilterContigsResults
 workspace_name is a string
 contigset_id is a string
-CountContigsResults is a reference to a hash where the following keys are defined:
-	contig_count has a value which is an int
+FilterContigsResults is a reference to a hash where the following keys are defined:
+	new_contigset_ref has a value which is a string
+	n_initial_contigs has a value which is an int
+	n_contigs_removed has a value which is an int
+	n_contigs_remaining has a value which is an int
 
 </pre>
 
@@ -137,11 +141,15 @@ CountContigsResults is a reference to a hash where the following keys are define
 
 $workspace_name is a MsneddonContigFilter.workspace_name
 $contigset_id is a MsneddonContigFilter.contigset_id
-$return is a MsneddonContigFilter.CountContigsResults
+$min_length is an int
+$return is a MsneddonContigFilter.FilterContigsResults
 workspace_name is a string
 contigset_id is a string
-CountContigsResults is a reference to a hash where the following keys are defined:
-	contig_count has a value which is an int
+FilterContigsResults is a reference to a hash where the following keys are defined:
+	new_contigset_ref has a value which is a string
+	n_initial_contigs has a value which is an int
+	n_contigs_removed has a value which is an int
+	n_contigs_remaining has a value which is an int
 
 
 =end text
@@ -155,48 +163,49 @@ contigset_id - the ContigSet to count.
 
 =cut
 
- sub count_contigs
+ sub filter_contigs
 {
     my($self, @args) = @_;
 
 # Authentication: required
 
-    if ((my $n = @args) != 2)
+    if ((my $n = @args) != 3)
     {
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function count_contigs (received $n, expecting 2)");
+							       "Invalid argument count for function filter_contigs (received $n, expecting 3)");
     }
     {
-	my($workspace_name, $contigset_id) = @args;
+	my($workspace_name, $contigset_id, $min_length) = @args;
 
 	my @_bad_arguments;
         (!ref($workspace_name)) or push(@_bad_arguments, "Invalid type for argument 1 \"workspace_name\" (value was \"$workspace_name\")");
         (!ref($contigset_id)) or push(@_bad_arguments, "Invalid type for argument 2 \"contigset_id\" (value was \"$contigset_id\")");
+        (!ref($min_length)) or push(@_bad_arguments, "Invalid type for argument 3 \"min_length\" (value was \"$min_length\")");
         if (@_bad_arguments) {
-	    my $msg = "Invalid arguments passed to count_contigs:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    my $msg = "Invalid arguments passed to filter_contigs:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'count_contigs');
+								   method_name => 'filter_contigs');
 	}
     }
 
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-	method => "MsneddonContigFilter.count_contigs",
+	method => "MsneddonContigFilter.filter_contigs",
 	params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
 	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
 					       code => $result->content->{error}->{code},
-					       method_name => 'count_contigs',
+					       method_name => 'filter_contigs',
 					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
 					      );
 	} else {
 	    return wantarray ? @{$result->result} : $result->result->[0];
 	}
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method count_contigs",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method filter_contigs",
 					    status_line => $self->{client}->status_line,
-					    method_name => 'count_contigs',
+					    method_name => 'filter_contigs',
 				       );
     }
 }
@@ -214,16 +223,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'count_contigs',
+                method_name => 'filter_contigs',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method count_contigs",
+            error => "Error invoking method filter_contigs",
             status_line => $self->{client}->status_line,
-            method_name => 'count_contigs',
+            method_name => 'filter_contigs',
         );
     }
 }
@@ -322,7 +331,7 @@ a string
 
 
 
-=head2 CountContigsResults
+=head2 FilterContigsResults
 
 =over 4
 
@@ -334,7 +343,10 @@ a string
 
 <pre>
 a reference to a hash where the following keys are defined:
-contig_count has a value which is an int
+new_contigset_ref has a value which is a string
+n_initial_contigs has a value which is an int
+n_contigs_removed has a value which is an int
+n_contigs_remaining has a value which is an int
 
 </pre>
 
@@ -343,7 +355,10 @@ contig_count has a value which is an int
 =begin text
 
 a reference to a hash where the following keys are defined:
-contig_count has a value which is an int
+new_contigset_ref has a value which is a string
+n_initial_contigs has a value which is an int
+n_contigs_removed has a value which is an int
+n_contigs_remaining has a value which is an int
 
 
 =end text

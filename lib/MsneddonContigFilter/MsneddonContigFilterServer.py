@@ -60,9 +60,9 @@ class JSONObjectEncoder(json.JSONEncoder):
 sync_methods = {}
 async_run_methods = {}
 async_check_methods = {}
-async_run_methods['MsneddonContigFilter.count_contigs_async'] = ['MsneddonContigFilter', 'count_contigs']
-async_check_methods['MsneddonContigFilter.count_contigs_check'] = ['MsneddonContigFilter', 'count_contigs']
-sync_methods['MsneddonContigFilter.count_contigs'] = True
+async_run_methods['MsneddonContigFilter.filter_contigs_async'] = ['MsneddonContigFilter', 'filter_contigs']
+async_check_methods['MsneddonContigFilter.filter_contigs_check'] = ['MsneddonContigFilter', 'filter_contigs']
+sync_methods['MsneddonContigFilter.filter_contigs'] = True
 
 class AsyncJobServiceClient(object):
 
@@ -334,10 +334,10 @@ class Application(object):
         self.serverlog.set_log_level(6)
         self.rpc_service = JSONRPCServiceCustom()
         self.method_authentication = dict()
-        self.rpc_service.add(impl_MsneddonContigFilter.count_contigs,
-                             name='MsneddonContigFilter.count_contigs',
-                             types=[basestring, basestring])
-        self.method_authentication['MsneddonContigFilter.count_contigs'] = 'required'
+        self.rpc_service.add(impl_MsneddonContigFilter.filter_contigs,
+                             name='MsneddonContigFilter.filter_contigs',
+                             types=[basestring, basestring, int])
+        self.method_authentication['MsneddonContigFilter.filter_contigs'] = 'required'
         self.auth_client = biokbase.nexus.Client(
             config={'server': 'nexus.api.globusonline.org',
                     'verify_ssl': True,
