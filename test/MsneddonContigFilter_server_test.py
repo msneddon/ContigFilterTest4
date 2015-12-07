@@ -53,13 +53,18 @@ class MsneddonContigFilterTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
-    def test_count_contigs(self):
+    def test_filter_contigs(self):
         obj_name = "contigset.1"
-        contig = {'id': '1', 'length': 10, 'md5': 'md5', 'sequence': 'agcttttcat'}
-        obj = {'contigs': [contig], 'id': 'id', 'md5': 'md5', 'name': 'name', 
+        contig1 = {'id': '1', 'length': 10, 'md5': 'md5', 'sequence': 'agcttttcat'}
+        contig2 = {'id': '2', 'length': 20, 'md5': 'md5', 'sequence': 'agcttttcatagcttttcat'}
+        obj = {'contigs': [contig1, contig2], 'id': 'id', 'md5': 'md5', 'name': 'name', 
                 'source': 'source', 'source_id': 'source_id', 'type': 'type'}
         self.getWsClient().save_objects({'workspace': self.getWsName(), 'objects':
             [{'type': 'KBaseGenomes.ContigSet', 'name': obj_name, 'data': obj}]})
-        ret = self.getImpl().count_contigs(self.getContext(), self.getWsName(), obj_name)
-        self.assertEqual(ret[0]['contig_count'], 1)
+        ret = self.getImpl().filter_contigs(self.getContext(), self.getWsName(), obj_name, 15)
+
+        self.assertEqual(ret[0]['n_initial_contigs'], 2)
+        self.assertEqual(ret[0]['n_contigs_removed'], 1)
+        self.assertEqual(ret[0]['n_contigs_remaining'], 1)
+
         
