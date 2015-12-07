@@ -22,13 +22,25 @@
 			"text_options": {
 				"valid_ws_types": ["KBaseGenomes.ContigSet"]
 			}
+		},
+		{
+			"id": "min_length",
+			"optional": false,
+			"advanced": false,
+			"allow_multiple": false,
+			"default_values": [ "" ],
+			"field_type": "text",
+			"text_options": {
+				"validate_as": "int",
+				"min_int" : 0
+			}
 		}
 	],
 	"behavior": {
 		"service-mapping": {
 			"url": "",
 			"name": "MsneddonContigFilter",
-			"method": "count_contigs",
+			"method": "filter_contigs",
 			"input_mapping": [
 				{
 					"narrative_system_variable": "workspace",
@@ -37,16 +49,24 @@
 				{
 					"input_parameter": "contigset_id",
 					"target_argument_position": 1
+				},
+				{
+					"input_parameter": "min_length",
+					"target_argument_position": 2
 				}
 			],
 			"output_mapping": [
 				{
-					"service_method_output_path": [0, "contig_count"],
-					"target_property": "contigCount"
+					"service_method_output_path": [0],
+					"target_property": "contig_filter_result"
 				},
 				{
 					"input_parameter": "contigset_id",
-					"target_property": "contigsetId"
+					"target_property": "input_contigset_id"
+				},
+				{
+					"input_parameter": "min_length",
+					"target_property": "input_min_length"
 				},
 				{
 					"narrative_system_variable": "workspace",

@@ -28,4 +28,6 @@ This repo is a simple example of a functional KBase module.  It defines one meth
 
     # add, commit, push updated spec and generated lib files
 
-    
+    # update the Narrative Method Specification (ui/narrative/methods/)
+
+    kb-sdk validate
