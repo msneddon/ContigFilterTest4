@@ -35,6 +35,7 @@ This sample module contains one small method - count_contigs.
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN filter_contigs
+        print('Starting filter contigs method.')
 
         token = ctx['token']
         ws = workspaceService(self.workspaceURL, token=token)
@@ -43,6 +44,8 @@ This sample module contains one small method - count_contigs.
         if 'provenance' in ctx:
             provenance = ctx['provenance']
             # add additional info to provenance here if needed
+
+        print('Got ContigSet data.')
 
         # save the contigs to a new list
         good_contigs = []
@@ -56,6 +59,9 @@ This sample module contains one small method - count_contigs.
 
         # replace the contigs in the contigSet object in local memory
         contigSet['contigs'] = good_contigs
+
+
+        print('Filtered ContigSet to '+str(n_remaining)+' contigs out of '+str(n_total))
 
         # save the new object to the workspace
         obj_info_list = ws.save_objects({
@@ -71,6 +77,7 @@ This sample module contains one small method - count_contigs.
                         })
         info = obj_info_list[0]
 
+        print('saved:'+str(info))
 
         returnVal = {
                 'new_contigset_ref': str(info[6]) + '/'+str(info[0])+'/'+str(info[4]),
@@ -78,6 +85,10 @@ This sample module contains one small method - count_contigs.
                 'n_contigs_removed':n_total-n_remaining,
                 'n_contigs_remaining':n_remaining
             }
+
+
+        print('returning:'+str(returnVal))
+
         #END filter_contigs
 
         # At some point might do deeper type checking...
