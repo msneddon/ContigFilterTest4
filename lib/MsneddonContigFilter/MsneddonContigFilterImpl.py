@@ -31,11 +31,15 @@ This sample module contains one small method - count_contigs.
         #END_CONSTRUCTOR
         pass
 
-    def filter_contigs(self, ctx, workspace_name, contigset_id, min_length):
+    def filter_contigs(self, ctx, params):
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN filter_contigs
         print('Starting filter contigs method.')
+
+        workspace_name = params['workspace']
+        contigset_id = params['contigset_id']
+        min_length = int(params['min_length'])
 
         token = ctx['token']
         ws = workspaceService(self.workspaceURL, token=token)

@@ -61,7 +61,12 @@ class MsneddonContigFilterTest(unittest.TestCase):
                 'source': 'source', 'source_id': 'source_id', 'type': 'type'}
         self.getWsClient().save_objects({'workspace': self.getWsName(), 'objects':
             [{'type': 'KBaseGenomes.ContigSet', 'name': obj_name, 'data': obj}]})
-        ret = self.getImpl().filter_contigs(self.getContext(), self.getWsName(), obj_name, 15)
+        ret = self.getImpl().filter_contigs(self.getContext(), 
+                                {
+                                    'workspace':self.getWsName(), 
+                                    'contigset_id':obj_name,
+                                    'min_length': 15
+                                })
 
         self.assertEqual(ret[0]['n_initial_contigs'], 2)
         self.assertEqual(ret[0]['n_contigs_removed'], 1)

@@ -112,7 +112,7 @@ sub new
 
 =head2 filter_contigs
 
-  $return = $obj->filter_contigs($workspace_name, $contigset_id, $min_length)
+  $return = $obj->filter_contigs($params)
 
 =over 4
 
@@ -121,10 +121,12 @@ sub new
 =begin html
 
 <pre>
-$workspace_name is a MsneddonContigFilter.workspace_name
-$contigset_id is a MsneddonContigFilter.contigset_id
-$min_length is an int
+$params is a MsneddonContigFilter.FilterContigsParams
 $return is a MsneddonContigFilter.FilterContigsResults
+FilterContigsParams is a reference to a hash where the following keys are defined:
+	workspace has a value which is a MsneddonContigFilter.workspace_name
+	contigset_id has a value which is a MsneddonContigFilter.contigset_id
+	min_length has a value which is an int
 workspace_name is a string
 contigset_id is a string
 FilterContigsResults is a reference to a hash where the following keys are defined:
@@ -139,10 +141,12 @@ FilterContigsResults is a reference to a hash where the following keys are defin
 
 =begin text
 
-$workspace_name is a MsneddonContigFilter.workspace_name
-$contigset_id is a MsneddonContigFilter.contigset_id
-$min_length is an int
+$params is a MsneddonContigFilter.FilterContigsParams
 $return is a MsneddonContigFilter.FilterContigsResults
+FilterContigsParams is a reference to a hash where the following keys are defined:
+	workspace has a value which is a MsneddonContigFilter.workspace_name
+	contigset_id has a value which is a MsneddonContigFilter.contigset_id
+	min_length has a value which is an int
 workspace_name is a string
 contigset_id is a string
 FilterContigsResults is a reference to a hash where the following keys are defined:
@@ -169,18 +173,16 @@ contigset_id - the ContigSet to count.
 
 # Authentication: required
 
-    if ((my $n = @args) != 3)
+    if ((my $n = @args) != 1)
     {
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function filter_contigs (received $n, expecting 3)");
+							       "Invalid argument count for function filter_contigs (received $n, expecting 1)");
     }
     {
-	my($workspace_name, $contigset_id, $min_length) = @args;
+	my($params) = @args;
 
 	my @_bad_arguments;
-        (!ref($workspace_name)) or push(@_bad_arguments, "Invalid type for argument 1 \"workspace_name\" (value was \"$workspace_name\")");
-        (!ref($contigset_id)) or push(@_bad_arguments, "Invalid type for argument 2 \"contigset_id\" (value was \"$contigset_id\")");
-        (!ref($min_length)) or push(@_bad_arguments, "Invalid type for argument 3 \"min_length\" (value was \"$min_length\")");
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
         if (@_bad_arguments) {
 	    my $msg = "Invalid arguments passed to filter_contigs:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
@@ -324,6 +326,40 @@ a string
 =begin text
 
 a string
+
+=end text
+
+=back
+
+
+
+=head2 FilterContigsParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+workspace has a value which is a MsneddonContigFilter.workspace_name
+contigset_id has a value which is a MsneddonContigFilter.contigset_id
+min_length has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+workspace has a value which is a MsneddonContigFilter.workspace_name
+contigset_id has a value which is a MsneddonContigFilter.contigset_id
+min_length has a value which is an int
+
 
 =end text
 

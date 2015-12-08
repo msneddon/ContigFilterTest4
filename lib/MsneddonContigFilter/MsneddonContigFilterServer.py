@@ -336,7 +336,7 @@ class Application(object):
         self.method_authentication = dict()
         self.rpc_service.add(impl_MsneddonContigFilter.filter_contigs,
                              name='MsneddonContigFilter.filter_contigs',
-                             types=[basestring, basestring, int])
+                             types=[dict])
         self.method_authentication['MsneddonContigFilter.filter_contigs'] = 'required'
         self.auth_client = biokbase.nexus.Client(
             config={'server': 'nexus.api.globusonline.org',

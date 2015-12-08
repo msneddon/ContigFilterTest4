@@ -145,18 +145,14 @@ public class MsneddonContigFilterClient {
      * Count contigs in a ContigSet
      * contigset_id - the ContigSet to count.
      * </pre>
-     * @param   arg1   instance of original type "workspace_name" (A string representing a workspace name.)
-     * @param   arg2   instance of original type "contigset_id" (A string representing a ContigSet id.)
-     * @param   minLength   instance of Long
+     * @param   params   instance of type {@link us.kbase.msneddoncontigfilter.FilterContigsParams FilterContigsParams}
      * @return   instance of type {@link us.kbase.msneddoncontigfilter.FilterContigsResults FilterContigsResults}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public FilterContigsResults filterContigs(String arg1, String arg2, Long minLength, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public FilterContigsResults filterContigs(FilterContigsParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
-        args.add(arg1);
-        args.add(arg2);
-        args.add(minLength);
+        args.add(params);
         TypeReference<List<FilterContigsResults>> retType = new TypeReference<List<FilterContigsResults>>() {};
         List<FilterContigsResults> res = caller.jsonrpcCall("MsneddonContigFilter.filter_contigs", args, retType, true, true, jsonRpcContext);
         return res.get(0);

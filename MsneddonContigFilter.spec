@@ -14,6 +14,14 @@ module MsneddonContigFilter {
 	*/
 	typedef string workspace_name;
 
+
+	typedef structure {
+		workspace_name workspace;
+		contigset_id contigset_id;
+		int min_length;
+	} FilterContigsParams;
+
+
 	typedef structure {
 		string new_contigset_ref;
 		int n_initial_contigs;
@@ -25,5 +33,5 @@ module MsneddonContigFilter {
 	Count contigs in a ContigSet
 	contigset_id - the ContigSet to count.
 	*/
-	funcdef filter_contigs(workspace_name,contigset_id, int min_length) returns (FilterContigsResults) authentication required;
+	funcdef filter_contigs(FilterContigsParams params) returns (FilterContigsResults) authentication required;
 };
